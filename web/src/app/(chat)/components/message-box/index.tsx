@@ -11,7 +11,7 @@ export function MessageBox() {
     <div className="flex-1 relative">
       <Header />
 
-      <ScrollArea className="message-box-h bg-zinc-900 pt-5 px-6 pb-[116px]">
+      <ScrollArea className="message-box-h bg-zinc-900 pt-5 px-6 pb-24">
         <div className="space-y-6">
           <Message>
             <TextMessageBox>ajshashajhs</TextMessageBox>
@@ -46,7 +46,7 @@ export function MessageBox() {
         </div>
       </ScrollArea>
 
-      <div className="absolute bottom-9 px-9 w-full">
+      <div className="absolute bottom-3 px-9 w-full">
         <MessageForm />
       </div>
     </div>

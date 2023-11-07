@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Avatar } from '../avatar'
 import { MenuDropdown } from './menu-dropdown'
 
@@ -7,7 +8,8 @@ interface ChatProps {
 
 export function Chat({ active = false }: ChatProps) {
   return (
-    <div
+    <Link
+      href={`/room/123`}
       data-active={active}
       className="h-[52px] relative data-[active=true]:bg-[#313133] data-[active=true]:before:content-[''] data-[active=true]:before:absolute data-[active=true]:before:bg-purple-700 data-[active=true]:before:w-[3px] data-[active=true]:before:left-0 data-[active=true]:before:top-0 data-[active=true]:before:bottom-0 flex items-center justify-between px-4"
     >
@@ -26,6 +28,6 @@ export function Chat({ active = false }: ChatProps) {
       </div>
 
       <MenuDropdown />
-    </div>
+    </Link>
   )
 }
