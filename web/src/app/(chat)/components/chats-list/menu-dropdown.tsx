@@ -8,10 +8,14 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreVertical, Trash } from 'lucide-react'
+import { MoreVertical, PinOff, Trash } from 'lucide-react'
 import { Avatar } from '../avatar'
 
-export function MenuDropdown() {
+interface MenuDropdownProps {
+  hasUnpinnOption?: boolean
+}
+
+export function MenuDropdown({ hasUnpinnOption = false }: MenuDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -44,6 +48,15 @@ export function MenuDropdown() {
               <Trash className="h-5 w-5 stroke-zinc-700 group-hover:stroke-zinc-500 transition-colors" />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
+
+          {hasUnpinnOption && (
+            <DropdownMenuItem className="group hover:bg-zinc-800">
+              <span className="text-zinc-200">Unpin</span>
+              <DropdownMenuShortcut>
+                <PinOff className="h-5 w-5 stroke-zinc-700 group-hover:stroke-zinc-500 transition-colors" />
+              </DropdownMenuShortcut>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

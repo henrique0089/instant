@@ -1,5 +1,8 @@
 'use client'
 
+import { UserPlus } from 'lucide-react'
+import { useEffect, useState } from 'react'
+
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -17,57 +20,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { UserPlus } from 'lucide-react'
-import { useState } from 'react'
 import { Avatar } from './avatar'
+import { User } from './inbox'
 
-type User = {
-  name: string
-  email: string
-  avatar: string
+interface AddUserDialogProps {
+  users: User[]
 }
 
-const users: User[] = [
-  {
-    name: 'Olivia Martin',
-    email: 'm@example.com',
-    avatar: '/avatars/01.png',
-  },
-  {
-    name: 'Isabella Nguyen',
-    email: 'isabella.nguyen@email.com',
-    avatar: '/avatars/03.png',
-  },
-  {
-    name: 'Emma Wilson',
-    email: 'emma@example.com',
-    avatar: '/avatars/05.png',
-  },
-  {
-    name: 'Jackson Lee',
-    email: 'lee@example.com',
-    avatar: '/avatars/02.png',
-  },
-  {
-    name: 'William Kim',
-    email: 'will@email.com',
-    avatar: '/avatars/04.png',
-  },
-  {
-    name: 'Jhon Doe',
-    email: 'jhondoe@email.com',
-    avatar: '/avatars/05.png',
-  },
-  {
-    name: 'Henrique Monteiro',
-    email: 'henriquemonteiro037@email.com',
-    avatar: '/avatars/06.png',
-  },
-]
-
-export function AddUserDialog() {
+export function AddUserDialog({ users }: AddUserDialogProps) {
   const [open, setOpen] = useState(false)
   const [selectedUsers, setSelectedUsers] = useState<User[]>([])
+  const [searchUser, setSearchUser] = useState('')
 
   function handleSelectUser(user: User) {
     if (selectedUsers.some((u) => u.email === user.email)) {
@@ -76,6 +39,14 @@ export function AddUserDialog() {
       setSelectedUsers((state) => [...state, user])
     }
   }
+
+  useEffect(() => {
+    if (searchUser) {
+      setSelectedUsers((prev) =>
+        prev.filter((user) => user.name.includes(searchUser)),
+      )
+    }
+  }, [searchUser])
 
   return (
     <>
@@ -100,6 +71,8 @@ export function AddUserDialog() {
           <Command className="overflow-hidden rounded-t-none border-t border-zinc-800 bg-transparent">
             <CommandInput
               placeholder="Search user..."
+              value={searchUser}
+              onValueChange={setSearchUser}
               className="text-zinc-200"
             />
             <CommandList>
@@ -110,7 +83,11 @@ export function AddUserDialog() {
                     key={user.email}
                     onSelect={() => handleSelectUser(user)}
                   >
-                    <Avatar variant="dark" />
+                    <Avatar
+                      variant="dark"
+                      src={user.avatar}
+                      alt={`${user.name}'s avatar`}
+                    />
                     <div className="ml-2">
                       <span className="text-zinc-200 text-sm font-medium leading-none">
                         {user.name}
@@ -129,7 +106,12 @@ export function AddUserDialog() {
             {selectedUsers.length > 0 ? (
               <div className="flex -space-x-2 overflow-hidden">
                 {selectedUsers.map((user) => (
-                  <Avatar key={user.email} variant="dark" />
+                  <Avatar
+                    key={user.email}
+                    variant="dark"
+                    src={user.avatar}
+                    alt={`${user.name}'s avatar`}
+                  />
                 ))}
               </div>
             ) : (
@@ -140,6 +122,7 @@ export function AddUserDialog() {
             <Button
               disabled={selectedUsers.length === 0}
               onClick={() => {
+                setSearchUser('')
                 setOpen(false)
               }}
               className="bg-zinc-800"

@@ -1,11 +1,29 @@
-import { Separator } from '@/components/ui/separator'
-import { MessageCircle, Pin } from 'lucide-react'
+import { clerkClient, currentUser } from '@clerk/nextjs'
+
 import { AddUserDialog } from './add-user-dialog'
-import { ChatsList } from './chats-list'
+import { ChatsSection } from './chats-section'
 import { ChatsSelect } from './chats-select'
 import { SearchInput } from './search-input'
 
-export function Inbox() {
+export type User = {
+  name: string
+  email: string
+  avatar: string
+}
+
+export async function Inbox() {
+  const users = await clerkClient.users.getUserList()
+  const loggedUser = await currentUser()
+  const filterdUsers: User[] = users
+    .filter((u) => u.id !== loggedUser?.id)
+    .map((u) => {
+      return {
+        name: u.firstName ?? '',
+        email: u.emailAddresses[0].emailAddress,
+        avatar: u.imageUrl,
+      }
+    })
+
   return (
     <div className="h-screen w-60 bg-zinc-800 py-6 border-r border-zinc-700">
       <div className="px-4 flex items-center justify-between">
@@ -17,7 +35,7 @@ export function Inbox() {
       </div>
 
       <div className="px-4">
-        <AddUserDialog />
+        <AddUserDialog users={filterdUsers} />
       </div>
 
       <div className="px-4 mt-4">
@@ -30,25 +48,7 @@ export function Inbox() {
         </form>
       </div>
 
-      <div className="mt-4">
-        <h3 className="px-4 text-zinc-400 text-sm font-medium flex items-center gap-2">
-          <Pin className="h-5 w-5 stroke-zinc-400" /> Pinned
-        </h3>
-
-        <ChatsList type="pinned" />
-      </div>
-
-      <div className="px-4 my-6">
-        <Separator className="bg-zinc-700" />
-      </div>
-
-      <div>
-        <h3 className="px-4 text-zinc-400 text-sm font-medium flex items-center gap-2">
-          <MessageCircle className="h-5 w-5 stroke-zinc-400" /> All Chats
-        </h3>
-
-        <ChatsList type="all" />
-      </div>
+      <ChatsSection />
     </div>
   )
 }

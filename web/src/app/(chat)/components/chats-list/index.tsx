@@ -12,11 +12,11 @@ export function ChatsList({ type }: ChatsListProps) {
       className="mt-4 data-[type=pinned]:h-28 data-[type=all]:h-48"
     >
       <div className="space-y-4">
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
-        <Chat />
+        <Chat hasUnpinnOption={type === 'pinned'} />
+        <Chat hasUnpinnOption={type === 'pinned'} />
+        <Chat hasUnpinnOption={type === 'pinned'} />
+        <Chat hasUnpinnOption={type === 'pinned'} />
+        <Chat hasUnpinnOption={type === 'pinned'} />
       </div>
     </ScrollArea>
   )

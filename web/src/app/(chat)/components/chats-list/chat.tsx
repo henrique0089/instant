@@ -4,9 +4,10 @@ import { MenuDropdown } from './menu-dropdown'
 
 interface ChatProps {
   active?: boolean
+  hasUnpinnOption?: boolean
 }
 
-export function Chat({ active = false }: ChatProps) {
+export function Chat({ active = false, hasUnpinnOption = false }: ChatProps) {
   return (
     <Link
       href={`/room/123`}
@@ -16,9 +17,7 @@ export function Chat({ active = false }: ChatProps) {
       <div className="flex items-start gap-3">
         <div className="relative">
           <Avatar variant="dark" />
-          <div className="h-[18px] w-[18px] rounded-full bg-purple-700 text-zinc-200 text-[10px] flex items-center justify-center absolute -right-1 -bottom-1">
-            +9
-          </div>
+          <div className="h-4 w-4 rounded-full bg-purple-700 flex items-center justify-center absolute -right-1 -bottom-1" />
         </div>
 
         <div className="space-y-1">
@@ -27,7 +26,7 @@ export function Chat({ active = false }: ChatProps) {
         </div>
       </div>
 
-      <MenuDropdown />
+      <MenuDropdown hasUnpinnOption={hasUnpinnOption} />
     </Link>
   )
 }
