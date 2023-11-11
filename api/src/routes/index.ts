@@ -1,14 +1,14 @@
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node'
 import { Router } from 'express'
-import { CreateChatRoomController } from 'src/controllers/chat-room/create-chat-room-controller'
+import { CreateChatRoomsController } from '../controllers/chat-room/create-chat-rooms-controller'
 import { FindChatRoomsController } from '../controllers/chat-room/find-chat-rooms-controller'
 
 const router = Router()
 
 const findChatRoomsController = new FindChatRoomsController()
-const createChatRoomController = new CreateChatRoomController()
+const createChatRoomsController = new CreateChatRoomsController()
 
 router.get('/chats', ClerkExpressWithAuth(), findChatRoomsController.handle)
-router.post('/chats', ClerkExpressWithAuth(), createChatRoomController.handle)
+router.post('/chats', ClerkExpressWithAuth(), createChatRoomsController.handle)
 
 export { router as routes }

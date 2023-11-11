@@ -1,13 +1,14 @@
+import clerkClient from '@clerk/clerk-sdk-node'
 import { Request, Response } from 'express'
 import { AppError } from 'src/app-error'
 import { z } from 'zod'
 import { ChatRoom } from '../../models/chat-room'
 import { PrismaChatRoomsRepository } from '../../repositories/prisma-chat-rooms-repository'
 
-export class CreateChatRoomController {
+export class CreateChatRoomsController {
   async handle(req: Request, res: Response): Promise<Response> {
     const bodySchema = z.object({
-      userIds: z.string().uuid().array().min(1),
+      userIds: z.string().array().min(1),
     })
     const chatRoomsRepo = new PrismaChatRoomsRepository()
 
@@ -38,6 +39,28 @@ export class CreateChatRoomController {
 
     await chatRoomsRepo.create(chatRooms)
 
-    return res.json(existingChatRooms)
+    const clerUsers = await clerkClient.users.getUserList()
+
+    const rooms = chatRooms.map((r) => {
+      const member = r.members
+        .map((memberId) => {
+          const user = clerUsers.find((u) => u.id === memberId)
+          return {
+            id: user?.id,
+            name: user?.firstName,
+            email: user?.emailAddresses[0].emailAddress,
+            avatar: user?.imageUrl,
+          }
+        })
+        .find((m) => m.id !== userLoggedInId)
+
+      return {
+        id: r.id,
+        member,
+        pinnedAt: r.pinnedAt,
+      }
+    })
+
+    return res.json(rooms)
   }
 }
