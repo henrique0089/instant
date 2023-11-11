@@ -1,5 +1,7 @@
-import { clerkClient, currentUser } from '@clerk/nextjs'
+import { auth, clerkClient, currentUser } from '@clerk/nextjs'
 
+import { api } from '@/lib/axios'
+import { ChatRoom, DefaultChatRoom } from '@/store/chat-rooms-store'
 import { AddUserDialog } from './add-user-dialog'
 import { ChatsSection } from './chats-section'
 import { ChatsSelect } from './chats-select'
@@ -10,6 +12,11 @@ export type User = {
   name: string
   email: string
   avatar: string
+}
+
+export interface ChatRoomsResponse {
+  allChatRooms: DefaultChatRoom[]
+  pinnedChatRooms: ChatRoom[]
 }
 
 export async function Inbox() {
@@ -25,6 +32,15 @@ export async function Inbox() {
         avatar: u.imageUrl,
       }
     })
+
+  const { getToken } = auth()
+  const token = await getToken()
+
+  const { data } = await api.get<ChatRoomsResponse>('/chats', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
 
   return (
     <div className="h-screen w-60 bg-zinc-800 py-6 border-r border-zinc-700">
@@ -50,7 +66,10 @@ export async function Inbox() {
         </form>
       </div>
 
-      <ChatsSection />
+      <ChatsSection
+        allChatRooms={data.allChatRooms}
+        pinnedChatRooms={data.pinnedChatRooms}
+      />
     </div>
   )
 }

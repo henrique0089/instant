@@ -1,10 +1,10 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ChatRoom } from '@/store/chat-rooms-store'
+import { DefaultChatRoom } from '@/store/chat-rooms-store'
 import { Chat } from './chat'
 
 interface ChatsListProps {
   type: 'pinned' | 'all'
-  chats: ChatRoom[]
+  chats: DefaultChatRoom[]
 }
 
 export function ChatsList({ type, chats }: ChatsListProps) {

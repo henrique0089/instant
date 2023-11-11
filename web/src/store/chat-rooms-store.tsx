@@ -1,17 +1,25 @@
 import { create } from 'zustand'
 
+export type Member = {
+  id: string
+  name: string
+  email: string
+  avatar: string
+}
+
 export interface ChatRoom {
   id: string
-  member: {
-    name: string
-    email: string
-    avatar: string
-  }
+  member: Member
   pinnedAt: Date
 }
 
+export interface DefaultChatRoom {
+  id: string
+  member: Member
+}
+
 interface ChatRoomStore {
-  chatRooms: ChatRoom[]
+  chatRooms: DefaultChatRoom[]
   add: (room: ChatRoom) => void
 }
 

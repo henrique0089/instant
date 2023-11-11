@@ -1,4 +1,4 @@
-import { ChatRoom } from '@/store/chat-rooms-store'
+import { DefaultChatRoom } from '@/store/chat-rooms-store'
 import Link from 'next/link'
 import { Avatar } from '../avatar'
 import { MenuDropdown } from './menu-dropdown'
@@ -7,7 +7,7 @@ interface ChatProps {
   active?: boolean
   hasUnpinnOption?: boolean
   hasPinnOption?: boolean
-  chat: ChatRoom
+  chat: DefaultChatRoom
 }
 
 export function Chat({
@@ -36,7 +36,10 @@ export function Chat({
           <span className="block text-zinc-200 font-medium">
             {chat.member.name}
           </span>
-          <span className="block text-zinc-200 text-xs">
+          <span
+            title={chat.member.email}
+            className="block w-28 truncate text-zinc-200 text-xs"
+          >
             {chat.member.email}
           </span>
         </div>
