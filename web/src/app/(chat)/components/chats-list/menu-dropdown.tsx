@@ -8,16 +8,31 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreVertical, PinOff, Trash } from 'lucide-react'
+import { MoreVertical, Pin, PinOff, Trash } from 'lucide-react'
+import { useState } from 'react'
 import { Avatar } from '../avatar'
 
 interface MenuDropdownProps {
   hasUnpinnOption?: boolean
+  hasPinnOption?: boolean
 }
 
-export function MenuDropdown({ hasUnpinnOption = false }: MenuDropdownProps) {
+export function MenuDropdown({
+  hasPinnOption = false,
+  hasUnpinnOption = false,
+}: MenuDropdownProps) {
+  const [open, setOpen] = useState(false)
+
+  async function handlePinChat() {
+    console.log('pin')
+  }
+
+  async function handleUnpinChat() {
+    console.log('unpin')
+  }
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <button className="group">
           <MoreVertical className="h-5 w-5 stroke-zinc-500 group-hover:stroke-zinc-400" />
@@ -49,8 +64,23 @@ export function MenuDropdown({ hasUnpinnOption = false }: MenuDropdownProps) {
             </DropdownMenuShortcut>
           </DropdownMenuItem>
 
+          {hasPinnOption && (
+            <DropdownMenuItem
+              className="group hover:bg-zinc-800"
+              onClick={handlePinChat}
+            >
+              <span className="text-zinc-200">Pin</span>
+              <DropdownMenuShortcut>
+                <Pin className="h-5 w-5 stroke-zinc-700 group-hover:stroke-zinc-500 transition-colors" />
+              </DropdownMenuShortcut>
+            </DropdownMenuItem>
+          )}
+
           {hasUnpinnOption && (
-            <DropdownMenuItem className="group hover:bg-zinc-800">
+            <DropdownMenuItem
+              className="group hover:bg-zinc-800"
+              onClick={handleUnpinChat}
+            >
               <span className="text-zinc-200">Unpin</span>
               <DropdownMenuShortcut>
                 <PinOff className="h-5 w-5 stroke-zinc-700 group-hover:stroke-zinc-500 transition-colors" />

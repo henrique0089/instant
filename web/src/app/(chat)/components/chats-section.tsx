@@ -1,5 +1,6 @@
 'use client'
 
+import { useChatRoomsStore } from '@/store/chat-rooms-store'
 import { useAuth } from '@clerk/nextjs'
 import { MessageCircle, Pin } from 'lucide-react'
 import { useEffect } from 'react'
@@ -8,6 +9,10 @@ import { ChatsList } from './chats-list'
 
 export function ChatsSection() {
   const { getToken } = useAuth()
+
+  const chatRooms = useChatRoomsStore((state) => state.chatRooms)
+  const allChatRooms = chatRooms.filter((room) => room.pinnedAt === null)
+  const pinnedChatRooms = chatRooms.filter((room) => room.pinnedAt !== null)
 
   useEffect(() => {
     async function loadChats() {
@@ -18,8 +23,6 @@ export function ChatsSection() {
       //     Authorization: `Bearer ${token}`,
       //   },
       // })
-
-      console.log(token)
     }
 
     loadChats()
@@ -32,7 +35,7 @@ export function ChatsSection() {
           <Pin className="h-5 w-5 stroke-zinc-400" /> Pinned
         </h3>
 
-        <ChatsList type="pinned" />
+        <ChatsList type="pinned" chats={pinnedChatRooms} />
       </div>
 
       <div className="px-4 my-6">
@@ -44,7 +47,7 @@ export function ChatsSection() {
           <MessageCircle className="h-5 w-5 stroke-zinc-400" /> All Chats
         </h3>
 
-        <ChatsList type="all" />
+        <ChatsList type="all" chats={allChatRooms} />
       </div>
     </>
   )

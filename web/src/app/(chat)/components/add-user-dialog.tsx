@@ -1,6 +1,6 @@
 'use client'
 
-import { UserPlus } from 'lucide-react'
+import { Loader2, UserPlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -20,6 +20,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { api } from '@/lib/axios'
+import { ChatRoom, useChatRoomsStore } from '@/store/chat-rooms-store'
+import { useAuth } from '@clerk/nextjs'
 import { Avatar } from './avatar'
 import { User } from './inbox'
 
@@ -31,6 +34,10 @@ export function AddUserDialog({ users }: AddUserDialogProps) {
   const [open, setOpen] = useState(false)
   const [selectedUsers, setSelectedUsers] = useState<User[]>([])
   const [searchUser, setSearchUser] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const { getToken } = useAuth()
+  const addChatRoom = useChatRoomsStore((state) => state.add)
 
   function handleSelectUser(user: User) {
     if (selectedUsers.some((u) => u.email === user.email)) {
@@ -38,6 +45,33 @@ export function AddUserDialog({ users }: AddUserDialogProps) {
     } else {
       setSelectedUsers((state) => [...state, user])
     }
+  }
+
+  async function handleCreateChatRooms() {
+    setLoading(true)
+
+    const selectedIds = selectedUsers.map((u) => u.id)
+    const token = await getToken()
+
+    const res = await api.post<ChatRoom[]>(
+      '/chats',
+      {
+        userIds: selectedIds,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+
+    for (const room of res.data) {
+      addChatRoom(room)
+    }
+
+    setSearchUser('')
+    setSelectedUsers([])
+    setOpen(false)
   }
 
   useEffect(() => {
@@ -120,14 +154,11 @@ export function AddUserDialog({ users }: AddUserDialogProps) {
               </p>
             )}
             <Button
-              disabled={selectedUsers.length === 0}
-              onClick={() => {
-                setSearchUser('')
-                setOpen(false)
-              }}
+              disabled={selectedUsers.length === 0 || loading}
+              onClick={handleCreateChatRooms}
               className="bg-zinc-800"
             >
-              Continue
+              {loading ? <Loader2 className="animate-spin" /> : 'Continue'}
             </Button>
           </DialogFooter>
         </DialogContent>

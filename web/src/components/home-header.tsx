@@ -1,7 +1,8 @@
 'use client'
 
 import { useUser } from '@clerk/nextjs'
-import { Link } from 'lucide-react'
+
+import Link from 'next/link'
 import { Button } from './ui/button'
 
 export function HomeHeader() {
@@ -21,9 +22,7 @@ export function HomeHeader() {
           asChild
           className="bg-purple-700 hover:brightness-90 hover:bg-purple-700"
         >
-          <Link href="/dashboard" className="block">
-            Dashboard
-          </Link>
+          <Link href="/dashboard">Dashboard</Link>
         </Button>
       )}
     </header>

@@ -6,6 +6,7 @@ import { ChatsSelect } from './chats-select'
 import { SearchInput } from './search-input'
 
 export type User = {
+  id: string
   name: string
   email: string
   avatar: string
@@ -18,6 +19,7 @@ export async function Inbox() {
     .filter((u) => u.id !== loggedUser?.id)
     .map((u) => {
       return {
+        id: u.id,
         name: u.firstName ?? '',
         email: u.emailAddresses[0].emailAddress,
         avatar: u.imageUrl,
