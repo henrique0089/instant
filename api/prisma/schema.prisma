@@ -10,9 +10,19 @@ datasource db {
 model ChatRoom {
   id String @id @default(uuid())
 
-  members   String[]
-  pinnedAt  DateTime?
-  createdAt DateTime  @default(now())
+  members        String[]
+  createdAt      DateTime        @default(now())
+  pinnedChatRoom PinnedChatRoom?
 
   @@map("chat-rooms")
+}
+
+model PinnedChatRoom {
+  id String @id @default(uuid())
+
+  ownerId    String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+  chatRoomId String   @unique
+
+  @@map("pinned-chat-rooms")
 }

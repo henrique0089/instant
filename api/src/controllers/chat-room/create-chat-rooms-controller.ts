@@ -57,7 +57,6 @@ export class CreateChatRoomsController {
       return {
         id: r.id,
         member,
-        pinnedAt: r.pinnedAt,
       }
     })
 

@@ -10,12 +10,13 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
       return new ChatRoom(
         {
           members: chat.members,
-          pinnedAt: chat.pinnedAt,
           createdAt: chat.createdAt,
         },
         chat.id,
       )
     })
+
+    console.log(chatRooms)
 
     return chatRooms
   }
@@ -34,7 +35,6 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
     const chatRoom = new ChatRoom(
       {
         members: data.members,
-        pinnedAt: data.pinnedAt,
         createdAt: data.createdAt,
       },
       data.id,
@@ -57,7 +57,6 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
     const chatRoom = new ChatRoom(
       {
         members: room.members,
-        pinnedAt: room.pinnedAt,
         createdAt: room.createdAt,
       },
       room.id,
@@ -71,7 +70,6 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
       return {
         id: chat.id,
         members: chat.members,
-        pinnedAt: chat.pinnedAt,
         createdAt: chat.createdAt,
       }
     })
@@ -89,7 +87,6 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
       data: {
         id: chatRoom.id,
         members: chatRoom.members,
-        pinnedAt: chatRoom.pinnedAt,
         createdAt: chatRoom.createdAt,
       },
     })

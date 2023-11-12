@@ -55,7 +55,7 @@ export function MenuDropdown({
     const token = await getToken()
 
     try {
-      await api.patch(`/chats/pin/${roomId}`, {
+      await api.get(`/chats/pin/${roomId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -69,7 +69,20 @@ export function MenuDropdown({
   }
 
   async function handleUnpinChat() {
-    console.log('unpin')
+    const token = await getToken()
+
+    try {
+      await api.patch(`/chats/unpin/${roomId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      console.log('unpinned')
+      // add tooltip
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

@@ -3,7 +3,6 @@ import { Replace } from '../replace'
 
 type Props = {
   members: string[]
-  pinnedAt?: Date | null
   createdAt: Date
 }
 
@@ -33,13 +32,5 @@ export class ChatRoom {
 
   public get createdAt(): Date {
     return this.props.createdAt
-  }
-
-  public get pinnedAt(): Date | null | undefined {
-    return this.props.pinnedAt
-  }
-
-  public pinn() {
-    this.props.pinnedAt = new Date()
   }
 }
