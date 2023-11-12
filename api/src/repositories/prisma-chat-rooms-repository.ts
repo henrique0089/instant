@@ -43,6 +43,29 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
     return chatRoom
   }
 
+  async findByRoomId(roomId: string): Promise<ChatRoom | null> {
+    const room = await prisma.chatRoom.findUnique({
+      where: {
+        id: roomId,
+      },
+    })
+
+    if (!room) {
+      return null
+    }
+
+    const chatRoom = new ChatRoom(
+      {
+        members: room.members,
+        pinnedAt: room.pinnedAt,
+        createdAt: room.createdAt,
+      },
+      room.id,
+    )
+
+    return chatRoom
+  }
+
   async create(chatRooms: ChatRoom[]): Promise<void> {
     const data = chatRooms.map((chat) => {
       return {
@@ -55,6 +78,14 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
 
     await prisma.chatRoom.createMany({
       data,
+    })
+  }
+
+  async delete(roomId: string): Promise<void> {
+    await prisma.chatRoom.delete({
+      where: {
+        id: roomId,
+      },
     })
   }
 }

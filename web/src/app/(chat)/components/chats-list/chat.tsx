@@ -47,6 +47,10 @@ export function Chat({
 
       <div onClick={(e) => e.preventDefault()}>
         <MenuDropdown
+          roomId={chat.id}
+          memberName={chat.member.name}
+          memberEmail={chat.member.email}
+          memberAvatar={chat.member.avatar}
           hasUnpinnOption={hasUnpinnOption}
           hasPinnOption={hasPinnOption}
         />
