@@ -49,10 +49,40 @@ export class PrismaPinnedChatRoomsRepository
     )
   }
 
+  async findByUserId(userId: string): Promise<ChatRoom | null> {
+    const chatRoomData = await prisma.pinnedChatRoom.findFirst({
+      where: {
+        ownerId: userId,
+      },
+      include: {
+        chatRoom: true,
+      },
+    })
+
+    if (!chatRoomData) {
+      return null
+    }
+
+    const { chatRoom } = chatRoomData
+
+    return new ChatRoom(
+      { members: chatRoom.members, createdAt: chatRoom.createdAt },
+      chatRoom.id,
+    )
+  }
+
   async create({ ownerId, roomId }: PinnedChatRoomParams): Promise<void> {
     await prisma.pinnedChatRoom.create({
       data: {
         ownerId,
+        chatRoomId: roomId,
+      },
+    })
+  }
+
+  async delete(roomId: string): Promise<void> {
+    await prisma.pinnedChatRoom.delete({
+      where: {
         chatRoomId: roomId,
       },
     })

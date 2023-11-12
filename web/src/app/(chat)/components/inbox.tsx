@@ -67,8 +67,8 @@ export async function Inbox() {
       </div>
 
       <ChatsSection
-        allChatRooms={data.allChatRooms}
-        pinnedChatRooms={data.pinnedChatRooms}
+        allChatRooms={data?.allChatRooms}
+        pinnedChatRooms={data?.pinnedChatRooms}
       />
     </div>
   )

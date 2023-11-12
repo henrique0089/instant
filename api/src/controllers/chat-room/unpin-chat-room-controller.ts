@@ -1,14 +1,18 @@
 import { Request, Response } from 'express'
 import { AppError } from 'src/app-error'
+import { PrismaPinnedChatRoomsRepository } from 'src/repositories/prisma-pinned-chat-room-repository'
 import { z } from 'zod'
 import { PrismaChatRoomsRepository } from '../../repositories/prisma-chat-rooms-repository'
 
 export class UnpinChatRoomController {
   async handle(req: Request, res: Response): Promise<Response> {
+    const loggedUserId = req.auth.userId
+
     const paramsSchema = z.object({
       roomId: z.string(),
     })
     const chatRoomRepo = new PrismaChatRoomsRepository()
+    const pinnedChatRoomRepo = new PrismaPinnedChatRoomsRepository()
 
     const { roomId } = paramsSchema.parse(req.params)
 
@@ -18,15 +22,19 @@ export class UnpinChatRoomController {
       throw new AppError('Chat room not found!', 404)
     }
 
-    const isAlreadyUnpinnedAccount = chatRoom.pinnedAt === null
+    const pinnedAccount = await pinnedChatRoomRepo.findById(roomId)
 
-    if (isAlreadyUnpinnedAccount) {
-      throw new AppError('This account has already been unpinned!')
+    if (!pinnedAccount) {
+      throw new AppError('This account has not been pinned!')
     }
 
-    chatRoom.unpinn()
+    const isMemberOwner = await pinnedChatRoomRepo.findByUserId(loggedUserId)
 
-    await chatRoomRepo.save(chatRoom)
+    if (!isMemberOwner) {
+      throw new AppError('Unauthorized action!')
+    }
+
+    await pinnedChatRoomRepo.delete(roomId)
 
     return res.status(204).send()
   }

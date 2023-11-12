@@ -21,7 +21,7 @@ router.get(
   ClerkExpressWithAuth(),
   pinChatRoomController.handle,
 )
-router.patch(
+router.delete(
   '/chats/unpin/:roomId',
   ClerkExpressWithAuth(),
   unpinChatRoomController.handle,

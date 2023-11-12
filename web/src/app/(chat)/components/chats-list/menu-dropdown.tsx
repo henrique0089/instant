@@ -72,7 +72,7 @@ export function MenuDropdown({
     const token = await getToken()
 
     try {
-      await api.patch(`/chats/unpin/${roomId}`, {
+      await api.delete(`/chats/unpin/${roomId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
