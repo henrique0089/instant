@@ -52,7 +52,20 @@ export function MenuDropdown({
   }
 
   async function handlePinChat() {
-    console.log('pin')
+    const token = await getToken()
+
+    try {
+      await api.patch(`/chats/pin/${roomId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      console.log('pinned')
+      // add tooltip
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async function handleUnpinChat() {

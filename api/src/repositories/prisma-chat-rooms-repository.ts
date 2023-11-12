@@ -81,6 +81,20 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
     })
   }
 
+  async save(chatRoom: ChatRoom): Promise<void> {
+    await prisma.chatRoom.update({
+      where: {
+        id: chatRoom.id,
+      },
+      data: {
+        id: chatRoom.id,
+        members: chatRoom.members,
+        pinnedAt: chatRoom.pinnedAt,
+        createdAt: chatRoom.createdAt,
+      },
+    })
+  }
+
   async delete(roomId: string): Promise<void> {
     await prisma.chatRoom.delete({
       where: {
