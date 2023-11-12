@@ -18,7 +18,7 @@ export function Chat({
 }: ChatProps) {
   return (
     <Link
-      href={`/room/${chat.id}`}
+      href={`/room/${chat.id}?m=${chat.member.id}`}
       data-active={active}
       className="h-[52px] relative data-[active=true]:bg-[#313133] data-[active=true]:before:content-[''] data-[active=true]:before:absolute data-[active=true]:before:bg-purple-700 data-[active=true]:before:w-[3px] data-[active=true]:before:left-0 data-[active=true]:before:top-0 data-[active=true]:before:bottom-0 flex items-center justify-between px-4"
     >
