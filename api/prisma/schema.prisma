@@ -21,7 +21,7 @@ model PinnedChatRoom {
   id String @id @default(uuid())
 
   ownerId    String
-  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId String   @unique
 
   @@map("pinned-chat-rooms")

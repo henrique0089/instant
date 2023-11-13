@@ -93,6 +93,7 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
   }
 
   async delete(roomId: string): Promise<void> {
+    console.log(roomId)
     await prisma.chatRoom.delete({
       where: {
         id: roomId,

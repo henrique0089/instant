@@ -51,7 +51,14 @@ export const useChatRoomsStore = create<ChatRoomStore>((set, get) => ({
         (room) => room.id !== roomId,
       )
 
-      set(() => ({ pinnedChatRooms: filteredPinnedChatRooms }))
+      const filteredChatRooms = allChatRooms.filter(
+        (room) => room.id !== roomId,
+      )
+
+      set(() => ({
+        pinnedChatRooms: filteredPinnedChatRooms,
+        allChatRooms: filteredChatRooms,
+      }))
     } else {
       const filteredChatRooms = allChatRooms.filter(
         (room) => room.id !== roomId,

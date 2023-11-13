@@ -27,7 +27,7 @@ export class DeleteChatRoomController {
       throw new AppError('Unauthorized action!')
     }
 
-    await chatRoomRepo.delete(String(chatRoom.id))
+    await chatRoomRepo.delete(roomId)
 
     return res.status(204).send()
   }

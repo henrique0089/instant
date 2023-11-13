@@ -38,13 +38,14 @@ export function MenuDropdown({
 }: MenuDropdownProps) {
   const [open, setOpen] = useState(false)
   const { getToken } = useAuth()
-  const [pin, unpin, remove] = useChatRoomsStore((state) => [
+  const [pinnedChatRooms, pin, unpin, remove] = useChatRoomsStore((state) => [
+    state.pinnedChatRooms,
     state.pin,
     state.unpin,
     state.remove,
   ])
 
-  async function handleDeleteChatRoom(roomId: string) {
+  async function handleDeleteChatRoom() {
     const token = await getToken()
 
     try {
@@ -54,7 +55,9 @@ export function MenuDropdown({
         },
       })
 
-      remove(roomId, hasPinnOption)
+      const isPinned = pinnedChatRooms.some((r) => r.id === roomId)
+
+      remove(roomId, isPinned)
       // add tooltip
     } catch (error) {
       console.log(error)
@@ -125,7 +128,7 @@ export function MenuDropdown({
         <DropdownMenuSeparator className="bg-zinc-800" />
         <DropdownMenuGroup>
           <DropdownMenuItem
-            onClick={() => handleDeleteChatRoom(roomId)}
+            onClick={handleDeleteChatRoom}
             className="group hover:bg-zinc-800"
           >
             <span className="text-zinc-200">Remove from list</span>
