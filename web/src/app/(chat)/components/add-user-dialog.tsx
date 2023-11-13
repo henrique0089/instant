@@ -37,7 +37,10 @@ export function AddUserDialog({ users }: AddUserDialogProps) {
   const [loading, setLoading] = useState(false)
 
   const { getToken } = useAuth()
-  const addChatRoom = useChatRoomsStore((state) => state.add)
+  const [addChatRoom, chatRooms] = useChatRoomsStore((state) => [
+    state.add,
+    state.allChatRooms,
+  ])
 
   function handleSelectUser(user: User) {
     if (selectedUsers.some((u) => u.email === user.email)) {
@@ -69,6 +72,7 @@ export function AddUserDialog({ users }: AddUserDialogProps) {
       addChatRoom(room)
     }
 
+    setLoading(false)
     setSearchUser('')
     setSelectedUsers([])
     setOpen(false)
@@ -81,6 +85,11 @@ export function AddUserDialog({ users }: AddUserDialogProps) {
       )
     }
   }, [searchUser])
+
+  const chatRoomsUsers = chatRooms.map((r) => r.member)
+  const filteredUsers = users.filter((u) =>
+    chatRoomsUsers.every((chatRoomUser) => chatRoomUser.id !== u.id),
+  )
 
   return (
     <>
@@ -112,7 +121,7 @@ export function AddUserDialog({ users }: AddUserDialogProps) {
             <CommandList>
               <CommandEmpty>No users found.</CommandEmpty>
               <CommandGroup className="p-2">
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <CommandItem
                     key={user.email}
                     onSelect={() => handleSelectUser(user)}

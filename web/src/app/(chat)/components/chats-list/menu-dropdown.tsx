@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { api } from '@/lib/axios'
+import { ChatRoom, useChatRoomsStore } from '@/store/chat-rooms-store'
 import { useAuth } from '@clerk/nextjs'
 import { MoreVertical, Pin, PinOff, Trash } from 'lucide-react'
 import { useState } from 'react'
@@ -23,6 +24,10 @@ interface MenuDropdownProps {
   hasPinnOption?: boolean
 }
 
+type PinnedChatRoomResponse = {
+  pinnedChatRoom: ChatRoom
+}
+
 export function MenuDropdown({
   roomId,
   memberName,
@@ -33,6 +38,11 @@ export function MenuDropdown({
 }: MenuDropdownProps) {
   const [open, setOpen] = useState(false)
   const { getToken } = useAuth()
+  const [pin, unpin, remove] = useChatRoomsStore((state) => [
+    state.pin,
+    state.unpin,
+    state.remove,
+  ])
 
   async function handleDeleteChatRoom(roomId: string) {
     const token = await getToken()
@@ -44,7 +54,7 @@ export function MenuDropdown({
         },
       })
 
-      console.log('deleted')
+      remove(roomId, hasPinnOption)
       // add tooltip
     } catch (error) {
       console.log(error)
@@ -55,13 +65,16 @@ export function MenuDropdown({
     const token = await getToken()
 
     try {
-      await api.get(`/chats/pin/${roomId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const { data } = await api.get<PinnedChatRoomResponse>(
+        `/chats/pin/${roomId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      })
+      )
 
-      console.log('pinned')
+      pin(data.pinnedChatRoom)
       // add tooltip
     } catch (error) {
       console.log(error)
@@ -78,7 +91,7 @@ export function MenuDropdown({
         },
       })
 
-      console.log('unpinned')
+      unpin(roomId)
       // add tooltip
     } catch (error) {
       console.log(error)

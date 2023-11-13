@@ -1,4 +1,5 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { clerkClient } from '@clerk/nextjs'
 import { AudioMessage } from './audio-message'
 import { Header } from './header'
 import { ImageMessage } from './image-message'
@@ -6,10 +7,20 @@ import { Message } from './message'
 import { MessageForm } from './message-form'
 import { TextMessageBox } from './text-message'
 
-export function MessageBox() {
+interface MessageBoxProps {
+  memberId: string
+}
+
+export async function MessageBox({ memberId }: MessageBoxProps) {
+  const memberDetails = await clerkClient.users.getUser(String(memberId))
+  const member = {
+    name: String(memberDetails.firstName),
+    avatar: memberDetails.imageUrl,
+  }
+
   return (
     <div className="flex-1 relative">
-      <Header />
+      <Header member={member} />
 
       <ScrollArea className="message-box-h bg-zinc-900 pt-5 px-6 pb-24">
         <div className="space-y-6">

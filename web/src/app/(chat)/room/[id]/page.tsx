@@ -1,4 +1,3 @@
-import { clerkClient } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { MessageBox } from '../../components/message-box'
 
@@ -14,16 +13,7 @@ export default async function Room({ params, searchParams }: RoomProps) {
     return redirect('/dashboard')
   }
 
-  const memberId = searchParams.m
+  const memberId = searchParams.m as string
 
-  const memberDetails = await clerkClient.users.getUser(String(memberId))
-  const member = {
-    name: memberDetails.firstName,
-    email: memberDetails.emailAddresses[0].emailAddress,
-    avatar: memberDetails.imageUrl,
-  }
-
-  console.log(member)
-
-  return <MessageBox />
+  return <MessageBox memberId={memberId} />
 }

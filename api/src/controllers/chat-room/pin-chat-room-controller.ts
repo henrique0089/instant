@@ -1,3 +1,4 @@
+import clerkClient from '@clerk/clerk-sdk-node'
 import { Request, Response } from 'express'
 import { AppError } from 'src/app-error'
 import { PrismaPinnedChatRoomsRepository } from 'src/repositories/prisma-pinned-chat-room-repository'
@@ -33,6 +34,25 @@ export class PinChatRoomController {
       roomId: String(chatRoom.id),
     })
 
-    return res.status(204).send()
+    const clerkUsers = await clerkClient.users.getUserList()
+
+    const roomMember = chatRoom.members
+      .map((memberId) => {
+        const user = clerkUsers.find((u) => u.id === memberId)
+        return {
+          id: user?.id,
+          name: user?.firstName,
+          email: user?.emailAddresses[0].emailAddress,
+          avatar: user?.imageUrl,
+        }
+      })
+      .find((m) => m.id !== userLoggedInId)
+
+    const pinnedChatRoom = {
+      id: chatRoom.id,
+      member: roomMember,
+    }
+
+    return res.json({ pinnedChatRoom })
   }
 }

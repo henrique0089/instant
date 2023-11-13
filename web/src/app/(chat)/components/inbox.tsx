@@ -1,7 +1,5 @@
-import { auth, clerkClient, currentUser } from '@clerk/nextjs'
+import { clerkClient, currentUser } from '@clerk/nextjs'
 
-import { api } from '@/lib/axios'
-import { ChatRoom, DefaultChatRoom } from '@/store/chat-rooms-store'
 import { AddUserDialog } from './add-user-dialog'
 import { ChatsSection } from './chats-section'
 import { ChatsSelect } from './chats-select'
@@ -14,15 +12,10 @@ export type User = {
   avatar: string
 }
 
-export interface ChatRoomsResponse {
-  allChatRooms: DefaultChatRoom[]
-  pinnedChatRooms: ChatRoom[]
-}
-
 export async function Inbox() {
   const users = await clerkClient.users.getUserList()
   const loggedUser = await currentUser()
-  const filterdUsers: User[] = users
+  const filteredUsers: User[] = users
     .filter((u) => u.id !== loggedUser?.id)
     .map((u) => {
       return {
@@ -32,15 +25,6 @@ export async function Inbox() {
         avatar: u.imageUrl,
       }
     })
-
-  const { getToken } = auth()
-  const token = await getToken()
-
-  const { data } = await api.get<ChatRoomsResponse>('/chats', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
 
   return (
     <div className="h-screen w-60 bg-zinc-800 py-6 border-r border-zinc-700">
@@ -53,7 +37,7 @@ export async function Inbox() {
       </div>
 
       <div className="px-4">
-        <AddUserDialog users={filterdUsers} />
+        <AddUserDialog users={filteredUsers} />
       </div>
 
       <div className="px-4 mt-4">
@@ -67,8 +51,8 @@ export async function Inbox() {
       </div>
 
       <ChatsSection
-        allChatRooms={data?.allChatRooms}
-        pinnedChatRooms={data?.pinnedChatRooms}
+      // allChatRooms={data?.allChatRooms}
+      // pinnedChatRooms={data?.pinnedChatRooms}
       />
     </div>
   )

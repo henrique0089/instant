@@ -1,16 +1,40 @@
 'use client'
 
+import { api } from '@/lib/axios'
+import { ChatRoom, useChatRoomsStore } from '@/store/chat-rooms-store'
+import { useAuth } from '@clerk/nextjs'
 import { MessageCircle, Pin } from 'lucide-react'
+import { useEffect } from 'react'
 import { Separator } from '../../../components/ui/separator'
 import { ChatsList } from './chats-list'
-import { ChatRoomsResponse } from './inbox'
 
-type ChatsSectionProps = ChatRoomsResponse
+interface ChatRoomsResponse {
+  allChatRooms: ChatRoom[]
+  pinnedChatRooms: ChatRoom[]
+}
 
-export function ChatsSection({
-  allChatRooms,
-  pinnedChatRooms,
-}: ChatsSectionProps) {
+export function ChatsSection() {
+  const { getToken } = useAuth()
+  const [allChatRooms, pinnedChatRooms, initChatRooms] = useChatRoomsStore(
+    (state) => [state.allChatRooms, state.pinnedChatRooms, state.initChatRooms],
+  )
+
+  useEffect(() => {
+    async function loadChatRooms() {
+      const token = await getToken()
+
+      const { data } = await api.get<ChatRoomsResponse>('/chats', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      initChatRooms(data.allChatRooms, data.pinnedChatRooms)
+    }
+
+    loadChatRooms()
+  }, [getToken, initChatRooms])
+
   return (
     <div className="mt-4">
       {pinnedChatRooms?.length > 0 && (
