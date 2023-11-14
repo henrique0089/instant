@@ -3,8 +3,14 @@ import { prisma } from '../config/prisma'
 import { IChatRoomRepository } from './IChatRoomRepository'
 
 export class PrismaChatRoomsRepository implements IChatRoomRepository {
-  async findAll(): Promise<ChatRoom[]> {
-    const data = await prisma.chatRoom.findMany()
+  async findAll(userId: string): Promise<ChatRoom[]> {
+    const data = await prisma.chatRoom.findMany({
+      where: {
+        members: {
+          has: userId,
+        },
+      },
+    })
 
     const chatRooms = data.map((chat) => {
       return new ChatRoom(

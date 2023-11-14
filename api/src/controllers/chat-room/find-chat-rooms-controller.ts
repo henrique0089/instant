@@ -9,8 +9,8 @@ export class FindChatRoomsController {
 
     const chatRoomsRepo = new PrismaChatRoomsRepository()
     const pinnedChatRoomRepo = new PrismaPinnedChatRoomsRepository()
-    const chatRoomsData = await chatRoomsRepo.findAll()
-    const pinnedChatRoomsData = await pinnedChatRoomRepo.findAll()
+    const chatRoomsData = await chatRoomsRepo.findAll(userLoggedInId)
+    const pinnedChatRoomsData = await pinnedChatRoomRepo.findAll(userLoggedInId)
 
     const clerkUsers = await clerkClient.users.getUserList()
 

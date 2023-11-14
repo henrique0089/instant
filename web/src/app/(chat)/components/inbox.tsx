@@ -1,9 +1,9 @@
 import { clerkClient, currentUser } from '@clerk/nextjs'
 
 import { AddUserDialog } from './add-user-dialog'
+import { ChatsCounter } from './chats-counter'
 import { ChatsSection } from './chats-section'
-import { ChatsSelect } from './chats-select'
-import { SearchInput } from './search-input'
+import { SearchForm } from './search-form'
 
 export type User = {
   id: string
@@ -31,9 +31,7 @@ export async function Inbox() {
       <div className="px-4 flex items-center justify-between">
         <h2 className="text-2xl text-zinc-200 font-semibold">Inbox</h2>
 
-        <span className="block text-xs text-zinc-200 font-semibold">
-          <strong className="text-base">35</strong> chats
-        </span>
+        <ChatsCounter />
       </div>
 
       <div className="px-4">
@@ -41,19 +39,10 @@ export async function Inbox() {
       </div>
 
       <div className="px-4 mt-4">
-        <ChatsSelect />
+        <SearchForm />
       </div>
 
-      <div className="px-4 mt-4">
-        <form>
-          <SearchInput />
-        </form>
-      </div>
-
-      <ChatsSection
-      // allChatRooms={data?.allChatRooms}
-      // pinnedChatRooms={data?.pinnedChatRooms}
-      />
+      <ChatsSection />
     </div>
   )
 }

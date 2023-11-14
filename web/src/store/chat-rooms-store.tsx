@@ -15,6 +15,7 @@ export interface ChatRoom {
 interface ChatRoomStore {
   allChatRooms: ChatRoom[]
   pinnedChatRooms: ChatRoom[]
+  setAllChatRooms: (allChatRooms: ChatRoom[]) => void
   initChatRooms: (allChatRooms: ChatRoom[], pinnedChatRooms: ChatRoom[]) => void
   add: (room: ChatRoom) => void
   pin: (room: ChatRoom) => void
@@ -25,6 +26,9 @@ interface ChatRoomStore {
 export const useChatRoomsStore = create<ChatRoomStore>((set, get) => ({
   allChatRooms: [],
   pinnedChatRooms: [],
+  setAllChatRooms: (allChatRooms: ChatRoom[]) => {
+    set(() => ({ allChatRooms }))
+  },
   initChatRooms: (allChatRooms: ChatRoom[], pinnedChatRooms: ChatRoom[]) => {
     set(() => ({ allChatRooms, pinnedChatRooms }))
   },

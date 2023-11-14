@@ -62,6 +62,14 @@ export function ChatsSection() {
           <ChatsList type="all" chats={allChatRooms} />
         </div>
       )}
+
+      {allChatRooms?.length === 0 && pinnedChatRooms.length === 0 && (
+        <div className="mt-6 w-full flex flex-col justify-center items-center gap-2">
+          <MessageCircle className="h-10 w-10 stroke-zinc-600" />
+
+          <span className="text-zinc-600 text-lg">No chats yet</span>
+        </div>
+      )}
     </div>
   )
 }

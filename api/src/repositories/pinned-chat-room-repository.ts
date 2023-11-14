@@ -6,7 +6,7 @@ export interface PinnedChatRoomParams {
 }
 
 export interface IPinnedChatRoomRepository {
-  findAll(): Promise<ChatRoom[]>
+  findAll(userId: string): Promise<ChatRoom[]>
   findById(roomId: string): Promise<ChatRoom | null>
   findByUserId(userId: string): Promise<ChatRoom | null>
   create(data: PinnedChatRoomParams): Promise<void>

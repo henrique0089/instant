@@ -8,8 +8,11 @@ import {
 export class PrismaPinnedChatRoomsRepository
   implements IPinnedChatRoomRepository
 {
-  async findAll(): Promise<ChatRoom[]> {
+  async findAll(userId: string): Promise<ChatRoom[]> {
     const data = await prisma.pinnedChatRoom.findMany({
+      where: {
+        ownerId: userId,
+      },
       include: {
         chatRoom: true,
       },
