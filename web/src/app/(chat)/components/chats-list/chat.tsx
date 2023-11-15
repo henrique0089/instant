@@ -1,4 +1,4 @@
-import { DefaultChatRoom } from '@/store/chat-rooms-store'
+import { ChatRoom } from '@/store/chat-rooms-store'
 import Link from 'next/link'
 import { Avatar } from '../avatar'
 import { MenuDropdown } from './menu-dropdown'
@@ -7,7 +7,7 @@ interface ChatProps {
   active?: boolean
   hasUnpinnOption?: boolean
   hasPinnOption?: boolean
-  chat: DefaultChatRoom
+  chat: ChatRoom
 }
 
 export function Chat({

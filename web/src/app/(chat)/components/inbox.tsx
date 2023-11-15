@@ -3,6 +3,7 @@ import { clerkClient, currentUser } from '@clerk/nextjs'
 import { AddUserDialog } from './add-user-dialog'
 import { ChatsCounter } from './chats-counter'
 import { ChatsSection } from './chats-section'
+import { RestoreChatRoomsButton } from './restore-chat-rooms-button'
 import { SearchForm } from './search-form'
 
 export type User = {
@@ -34,8 +35,10 @@ export async function Inbox() {
         <ChatsCounter />
       </div>
 
-      <div className="px-4">
+      <div className="px-4 flex items-center justify-between">
         <AddUserDialog users={filteredUsers} />
+
+        <RestoreChatRoomsButton />
       </div>
 
       <div className="px-4 mt-4">
