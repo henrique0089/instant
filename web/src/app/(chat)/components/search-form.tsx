@@ -1,40 +1,38 @@
 'use client'
 
-import { useChatRoomsStore } from '@/store/chat-rooms-store'
+import { api } from '@/lib/axios'
+import { ChatRoom, useChatRoomsStore } from '@/store/chat-rooms-store'
+import { useAuth } from '@clerk/nextjs'
 import { Search } from 'lucide-react'
 import { FormEvent, useRef } from 'react'
 
 export function SearchForm() {
-  const [allChatRooms, setAllChatRooms] = useChatRoomsStore((state) => [
-    state.allChatRooms,
+  const [setAllChatRooms] = useChatRoomsStore((state) => [
     state.setAllChatRooms,
   ])
+  const { getToken } = useAuth()
 
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const oldChatRooms = [...allChatRooms]
-
-  function handleSearchChat(e: FormEvent) {
+  async function handleSearchChat(e: FormEvent) {
     e.preventDefault()
 
     const inputVal = inputRef.current?.value
     if (!inputVal) return
 
+    const token = await getToken()
     const name = inputVal.charAt(0).toUpperCase() + inputVal.slice(1)
 
-    const hasChatRoom = allChatRooms.some((room) =>
-      room.member.name.includes(name),
-    )
+    const res = await api.get<ChatRoom[]>('/chats/search', {
+      params: {
+        username: name,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
 
-    if (hasChatRoom) {
-      const filteredChatRooms = allChatRooms.filter((room) =>
-        room.member.name.includes(name),
-      )
-
-      setAllChatRooms(filteredChatRooms)
-    } else {
-      setAllChatRooms(oldChatRooms)
-    }
+    setAllChatRooms(res.data)
 
     inputRef.current.value = ''
   }

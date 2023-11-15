@@ -1,6 +1,7 @@
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node'
 import { Router } from 'express'
 import { PinChatRoomController } from 'src/controllers/chat-room/pin-chat-room-controller'
+import { SearchChatRoomByUsernameController } from 'src/controllers/chat-room/search-chat-room-controller'
 import { UnpinChatRoomController } from 'src/controllers/chat-room/unpin-chat-room-controller'
 import { CreateChatRoomsController } from '../controllers/chat-room/create-chat-rooms-controller'
 import { DeleteChatRoomController } from '../controllers/chat-room/delete-chat-room-controller'
@@ -13,6 +14,8 @@ const createChatRoomsController = new CreateChatRoomsController()
 const deleteChatRoomController = new DeleteChatRoomController()
 const pinChatRoomController = new PinChatRoomController()
 const unpinChatRoomController = new UnpinChatRoomController()
+const searchChatRoomByUsernameController =
+  new SearchChatRoomByUsernameController()
 
 router.get('/chats', ClerkExpressWithAuth(), findChatRoomsController.handle)
 router.post('/chats', ClerkExpressWithAuth(), createChatRoomsController.handle)
@@ -20,6 +23,11 @@ router.get(
   '/chats/pin/:roomId',
   ClerkExpressWithAuth(),
   pinChatRoomController.handle,
+)
+router.get(
+  '/chats/search',
+  ClerkExpressWithAuth(),
+  searchChatRoomByUsernameController.handle,
 )
 router.delete(
   '/chats/unpin/:roomId',
