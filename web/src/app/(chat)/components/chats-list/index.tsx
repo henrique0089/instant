@@ -1,13 +1,17 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { DefaultChatRoom } from '@/store/chat-rooms-store'
+import { ChatRoom } from '@/store/chat-rooms-store'
+import { useParams } from 'next/navigation'
 import { Chat } from './chat'
 
 interface ChatsListProps {
   type: 'pinned' | 'all'
-  chats: DefaultChatRoom[]
+  chats: ChatRoom[]
 }
 
 export function ChatsList({ type, chats }: ChatsListProps) {
+  const params = useParams()
+  const roomId = params.id
+
   return (
     <ScrollArea
       data-type={type}
@@ -17,6 +21,7 @@ export function ChatsList({ type, chats }: ChatsListProps) {
         {chats.map((chat) => (
           <Chat
             key={chat.id}
+            active={roomId === chat.id}
             hasUnpinnOption={type === 'pinned'}
             hasPinnOption={type === 'all'}
             chat={chat}

@@ -5,15 +5,27 @@ import cors from 'cors'
 import 'dotenv/config'
 import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 import { ZodError } from 'zod'
+
 import { AppError } from './app-error'
 import { routes } from './routes'
 
 const app = express()
+const server = createServer(app)
 
 app.use(express.json())
 app.use(cors())
 app.use(routes)
+
+const io = new Server(server, {
+  cors: {
+    origin: 'https://3000-henrique998-instant-edbtw68qswi.ws-us106.gitpod.io',
+  },
+})
+
+io.on('connection', () => console.log('websocket server connected!'))
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ZodError) {
@@ -29,4 +41,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   return res.status(500).send(err.message)
 })
 
-export { app }
+export { app, io }
