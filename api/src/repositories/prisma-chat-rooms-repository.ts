@@ -22,8 +22,6 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
       )
     })
 
-    console.log(chatRooms)
-
     return chatRooms
   }
 

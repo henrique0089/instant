@@ -26,3 +26,31 @@ model PinnedChatRoom {
 
   @@map("pinned-chat-rooms")
 }
+
+model TextMessage {
+  id String @id @default(uuid())
+
+  content     String
+  senderId    String
+  recipientId String
+  createdAt   DateTime
+
+  @@map("text-messages")
+}
+
+model MediaMessage {
+  id String @id @default(uuid())
+
+  url         String
+  type        MessageType
+  senderId    String
+  recipientId String
+  createdAt   DateTime
+
+  @@map("media-messages")
+}
+
+enum MessageType {
+  IMAGE
+  AUDIO
+}

@@ -19,13 +19,11 @@ app.use(express.json())
 app.use(cors())
 app.use(routes)
 
-const io = new Server(server, {
-  cors: {
-    origin: 'https://3000-henrique998-instant-edbtw68qswi.ws-us106.gitpod.io',
-  },
-})
+const io = new Server(server, { cors: { origin: '*' } })
 
-io.on('connection', () => console.log('websocket server connected!'))
+io.on('connection', () => {
+  console.log('connected')
+})
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ZodError) {
@@ -41,4 +39,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   return res.status(500).send(err.message)
 })
 
-export { app, io }
+export { io, server }
