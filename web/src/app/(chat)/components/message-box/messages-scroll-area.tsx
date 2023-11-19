@@ -2,6 +2,7 @@
 
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { socketInstance } from '@/lib/socket.io-client'
+import { useUser } from '@clerk/nextjs'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { AudioMessage } from './audio-message'
@@ -9,16 +10,15 @@ import { ImageMessage } from './image-message'
 import { Message } from './message'
 import { TextMessageBox } from './text-message'
 
-interface MessagesScrollAreaProps {
-  token: string
-}
-
-export function MessagesScrollArea({ token }: MessagesScrollAreaProps) {
-  const [socket] = useState(socketInstance(token))
+export function MessagesScrollArea() {
+  const { user } = useUser()
+  const [socket] = useState(socketInstance(user?.id))
   const params = useParams()
 
   useEffect(() => {
-    socket.emit('start', { roomId: params.id })
+    socket.emit('start', { roomId: params.id }, (data: unknown) =>
+      console.log(data),
+    )
   })
 
   return (

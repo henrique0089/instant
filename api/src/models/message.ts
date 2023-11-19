@@ -1,17 +1,19 @@
 import { randomUUID } from 'node:crypto'
 import { Replace } from '../replace'
 
-type MessageType = 'IMAGE' | 'AUDIO'
+export type MessageType = 'TEXT' | 'IMAGE' | 'AUDIO'
 
 type Props = {
-  url: string
+  content: string
+  url: string | null
   type: MessageType
   senderId: string
   recipientId: string
+  roomId: string
   createdAt: Date
 }
 
-export class MediaMessage {
+export class Message {
   private _id?: string
   private props: Props
 
@@ -27,11 +29,19 @@ export class MediaMessage {
     return this._id
   }
 
-  public get url(): string {
+  public get content(): string {
+    return this.props.content
+  }
+
+  public set content(content: string) {
+    this.props.content = content
+  }
+
+  public get url(): string | null {
     return this.props.url
   }
 
-  public set url(url: string) {
+  public set url(url: string | null) {
     this.props.url = url
   }
 
@@ -57,6 +67,14 @@ export class MediaMessage {
 
   public set recipientId(recipientId: string) {
     this.props.recipientId = recipientId
+  }
+
+  public get roomId(): string {
+    return this.props.roomId
+  }
+
+  public set roomId(roomId: string) {
+    this.props.roomId = roomId
   }
 
   public get createdAt(): Date {
