@@ -23,7 +23,7 @@ export function MessageForm() {
       roomId: params.id,
     }
 
-    socket.emit('message', data, (res: unknown) => console.log(res))
+    socket.emit('text-message', data)
 
     setContent('')
   }

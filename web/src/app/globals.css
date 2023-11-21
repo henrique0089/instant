@@ -78,3 +78,16 @@
 .message-box-h {
   height: calc(100vh - 80px);
 }
+
+::-webkit-scrollbar {
+  height: 100%;
+  width: 0.625rem;
+  border-left: 1px;
+  border-left-color: transparent;
+  padding: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-color: hsl(var(--border));
+}

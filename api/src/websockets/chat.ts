@@ -1,4 +1,5 @@
 /* eslint-disable n/no-callback-literal */
+import clerkClient from '@clerk/clerk-sdk-node'
 import { CreateMessageService } from 'src/services/create-message-service'
 import { FindAllMessagesService } from 'src/services/find-all-messages-service'
 import { FindChatRoomByIdService } from 'src/services/find-chat-room-by-id-service'
@@ -26,7 +27,7 @@ io.on('connect', (socket) => {
     cb({ messages })
   })
 
-  socket.on('message', async (data: CreateChatRoomData, cb) => {
+  socket.on('text-message', async (data: CreateChatRoomData) => {
     const findChatRoomByIdService = new FindChatRoomByIdService()
     const createMessageService = new CreateMessageService()
 
@@ -44,8 +45,23 @@ io.on('connect', (socket) => {
       url: null,
     }
 
-    await createMessageService.execute(messageData)
+    const fullMessageData = await createMessageService.execute(messageData)
+    const users = await clerkClient.users.getUserList()
+    const senderAvatar = users.find((u) => u.id === data.senderId)?.imageUrl
+    const recipientAvatar = users.find((u) => u.id === recipientId)?.imageUrl
 
-    cb({ messageData })
+    const fullMsg = {
+      id: fullMessageData.id,
+      content: fullMessageData.content,
+      senderId: fullMessageData.senderId,
+      senderAvatar,
+      recipientId,
+      recipientAvatar,
+      roomId: fullMessageData.roomId,
+      type: fullMessageData.type,
+      url: fullMessageData.url,
+    }
+
+    io.to(data.roomId).emit('recieved-text-message', fullMsg)
   })
 })

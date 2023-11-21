@@ -1,3 +1,4 @@
+import { PrismaMessagesRepository } from 'src/repositories/prisma-message-repository'
 import { Message, MessageType } from '../models/message'
 
 interface Params {
@@ -10,7 +11,16 @@ interface Params {
 }
 
 export class CreateMessageService {
-  async execute({ content, senderId, url, type, recipientId, roomId }: Params) {
+  async execute({
+    content,
+    senderId,
+    url,
+    type,
+    recipientId,
+    roomId,
+  }: Params): Promise<Message> {
+    const messagesRepo = new PrismaMessagesRepository()
+
     const message = new Message({
       content,
       url,
@@ -20,6 +30,8 @@ export class CreateMessageService {
       roomId,
     })
 
-    console.log(message)
+    await messagesRepo.create(message)
+
+    return message
   }
 }
