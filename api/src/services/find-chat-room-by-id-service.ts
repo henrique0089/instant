@@ -3,6 +3,7 @@ import { PrismaChatRoomsRepository } from 'src/repositories/prisma-chat-rooms-re
 interface Response {
   id: string
   members: string[]
+  socketId: string | null
 }
 
 export class FindChatRoomByIdService {
@@ -18,6 +19,7 @@ export class FindChatRoomByIdService {
     const room = {
       id: String(data.id),
       members: data.members,
+      socketId: data.socketId,
     }
 
     return room

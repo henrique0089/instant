@@ -34,6 +34,7 @@ export class CreateChatRoomsController {
     const chatRooms = userIds.map((userId) => {
       return new ChatRoom({
         members: [userLoggedInId, userId],
+        socketId: null,
       })
     })
 

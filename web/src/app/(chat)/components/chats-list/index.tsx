@@ -1,6 +1,12 @@
+'use client'
+
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { socketInstance } from '@/lib/socket.io-client'
 import { ChatRoom } from '@/store/chat-rooms-store'
+import { NotificationData, useMessagesStore } from '@/store/messages-store'
+import { useUser } from '@clerk/nextjs'
 import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { Chat } from './chat'
 
 interface ChatsListProps {
@@ -9,8 +15,23 @@ interface ChatsListProps {
 }
 
 export function ChatsList({ type, chats }: ChatsListProps) {
+  const { user } = useUser()
+  const [socket] = useState(socketInstance(user?.id))
   const params = useParams()
   const roomId = params.id
+
+  const addNotification = useMessagesStore((state) => state.addNotification)
+
+  useEffect(() => {
+    socket.on('notification', (notification: NotificationData) => {
+      // console.log(notification)
+      addNotification(notification)
+    })
+
+    return () => {
+      socket.off('notification')
+    }
+  }, [addNotification, socket])
 
   return (
     <ScrollArea

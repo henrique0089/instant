@@ -38,7 +38,9 @@ export function Message({
       <Avatar src={avatar} />
       <div className="space-y-2">
         {children}
-        <span className="block text-xs text-zinc-400">11:25 pm</span>
+        <span className="block text-xs text-zinc-400">
+          {formattedDate} {date.getHours() < 12 ? 'pm' : 'am'}
+        </span>
       </div>
     </div>
   )

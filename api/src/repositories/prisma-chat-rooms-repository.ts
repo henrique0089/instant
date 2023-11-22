@@ -16,6 +16,7 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
       return new ChatRoom(
         {
           members: chat.members,
+          socketId: chat.socketId,
           createdAt: chat.createdAt,
         },
         chat.id,
@@ -39,6 +40,7 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
     const chatRoom = new ChatRoom(
       {
         members: data.members,
+        socketId: data.socketId,
         createdAt: data.createdAt,
       },
       data.id,
@@ -61,6 +63,7 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
     const chatRoom = new ChatRoom(
       {
         members: room.members,
+        socketId: room.socketId,
         createdAt: room.createdAt,
       },
       room.id,
@@ -74,6 +77,7 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
       return {
         id: chat.id,
         members: chat.members,
+        socketId: chat.socketId,
         createdAt: chat.createdAt,
       }
     })
@@ -91,13 +95,13 @@ export class PrismaChatRoomsRepository implements IChatRoomRepository {
       data: {
         id: chatRoom.id,
         members: chatRoom.members,
+        socketId: chatRoom.socketId,
         createdAt: chatRoom.createdAt,
       },
     })
   }
 
   async delete(roomId: string): Promise<void> {
-    console.log(roomId)
     await prisma.chatRoom.delete({
       where: {
         id: roomId,

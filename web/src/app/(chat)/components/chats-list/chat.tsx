@@ -1,5 +1,7 @@
 import { ChatRoom } from '@/store/chat-rooms-store'
-import Link from 'next/link'
+import { useMessagesStore } from '@/store/messages-store'
+import { useUser } from '@clerk/nextjs'
+import { useParams, useRouter } from 'next/navigation'
 import { Avatar } from '../avatar'
 import { MenuDropdown } from './menu-dropdown'
 
@@ -16,11 +18,32 @@ export function Chat({
   hasPinnOption = false,
   chat,
 }: ChatProps) {
+  const params = useParams()
+  const router = useRouter()
+  const { user } = useUser()
+  const [notifications, removeNotification] = useMessagesStore((state) => [
+    state.notifications,
+    state.removeNotification,
+  ])
+  const possibleNotification = notifications.find((n) => n.roomId === chat.id)
+  const hasNotification =
+    possibleNotification &&
+    (params.id !== chat.id || !params.id) &&
+    possibleNotification.senderId !== user?.id
+
+  function handleNavigateToChatRoom() {
+    if (hasNotification) {
+      removeNotification(chat.id)
+    }
+
+    router.push(`/room/${chat.id}`)
+  }
+
   return (
-    <Link
-      href={`/room/${chat.id}?m=${chat.member.id}`}
+    <div
       data-active={active}
-      className="h-[52px] relative data-[active=true]:bg-[#313133] data-[active=true]:before:content-[''] data-[active=true]:before:absolute data-[active=true]:before:bg-purple-700 data-[active=true]:before:w-[3px] data-[active=true]:before:left-0 data-[active=true]:before:top-0 data-[active=true]:before:bottom-0 flex items-center justify-between px-4"
+      onClick={handleNavigateToChatRoom}
+      className="h-[52px] relative data-[active=true]:bg-[#313133] data-[active=true]:before:content-[''] data-[active=true]:before:absolute data-[active=true]:before:bg-purple-700 data-[active=true]:before:w-[3px] data-[active=true]:before:left-0 data-[active=true]:before:top-0 data-[active=true]:before:bottom-0 hover:cursor-pointer flex items-center justify-between px-4"
     >
       <div className="flex items-start gap-3">
         <div className="relative">
@@ -29,7 +52,9 @@ export function Chat({
             src={chat.member.avatar}
             alt={`${chat.member.name}'s avatar`}
           />
-          <div className="h-4 w-4 rounded-full bg-purple-700 flex items-center justify-center absolute -right-1 -bottom-1" />
+          {hasNotification && (
+            <div className="h-4 w-4 rounded-full bg-purple-700 flex items-center justify-center absolute -right-1 -bottom-1" />
+          )}
         </div>
 
         <div className="space-y-1">
@@ -55,6 +80,6 @@ export function Chat({
           hasPinnOption={hasPinnOption}
         />
       </div>
-    </Link>
+    </div>
   )
 }

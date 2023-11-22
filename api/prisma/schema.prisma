@@ -11,6 +11,7 @@ model ChatRoom {
   id String @id @default(uuid())
 
   members        String[]
+  socketId       String?
   createdAt      DateTime        @default(now())
   pinnedChatRoom PinnedChatRoom?
 
