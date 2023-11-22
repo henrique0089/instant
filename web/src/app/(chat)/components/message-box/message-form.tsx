@@ -5,10 +5,12 @@ import { socketInstance } from '@/lib/socket.io-client'
 import { useUser } from '@clerk/nextjs'
 import { ImageIcon, Mic, Send } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 
 export function MessageForm() {
   const [content, setContent] = useState('')
+  const [image, setImage] = useState<File | null>(null)
+
   const { user } = useUser()
   const params = useParams()
   const [socket] = useState(socketInstance(user?.id))
@@ -28,6 +30,24 @@ export function MessageForm() {
     setContent('')
   }
 
+  function onChangeImage(files: FileList | null) {
+    if (!files || files.length < 1) return
+
+    setImage(files[0])
+  }
+
+  useEffect(() => {
+    if (image) {
+      socket.emit('image-message', {
+        image,
+        senderId: user?.id,
+        roomId: params.id,
+      })
+
+      setImage(null)
+    }
+  }, [image])
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="h-16 w-full bg-zinc-800 py-[10px] rounded-md px-4 border border-zinc-700 flex items-center justify-between gap-4">
@@ -45,9 +65,15 @@ export function MessageForm() {
         </div>
 
         <div className="flex items-center gap-5">
-          <button type="button" className="group">
+          <input
+            type="file"
+            id="image"
+            onChange={(e) => onChangeImage(e.target.files)}
+            className="sr-only"
+          />
+          <label htmlFor="image" className="group">
             <ImageIcon className="h-6 w-6 stroke-zinc-400 group-hover:stroke-zinc-300" />
-          </button>
+          </label>
 
           <Separator orientation="vertical" className="bg-zinc-700 h-6" />
 

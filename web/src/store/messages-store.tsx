@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 export type MessageData = {
   id: string
-  content: string
+  content: string | null
   type: 'TEXT' | 'IMAGE' | 'AUDIO'
   url: string | null
   roomId: string

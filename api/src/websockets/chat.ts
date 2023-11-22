@@ -1,5 +1,6 @@
 /* eslint-disable n/no-callback-literal */
 import clerkClient from '@clerk/clerk-sdk-node'
+import { CreateImageMessageService } from 'src/services/create-image-message-service'
 import { CreateMessageService } from 'src/services/create-message-service'
 import { FindAllMessagesService } from 'src/services/find-all-messages-service'
 import { FindChatRoomByIdService } from 'src/services/find-chat-room-by-id-service'
@@ -10,10 +11,16 @@ type ChatRoomData = {
   roomId: string
 }
 
-type CreateChatRoomData = {
+type CreateTextMessageData = {
   content: string
   senderId: string
   type: MessageType
+  roomId: string
+}
+
+type CreateImageMessageData = {
+  image: Buffer
+  senderId: string
   roomId: string
 }
 
@@ -22,12 +29,14 @@ io.on('connect', (socket) => {
     socket.join(roomId)
 
     const findAllMessagesService = new FindAllMessagesService()
-    const messages = await findAllMessagesService.execute(roomId)
+    const messages = (await findAllMessagesService.execute(roomId)).filter(
+      (message) => message.content !== null,
+    )
 
     cb({ messages })
   })
 
-  socket.on('text-message', async (data: CreateChatRoomData) => {
+  socket.on('text-message', async (data: CreateTextMessageData) => {
     const findChatRoomByIdService = new FindChatRoomByIdService()
     const createMessageService = new CreateMessageService()
 
@@ -62,6 +71,25 @@ io.on('connect', (socket) => {
       url: fullMessageData.url,
     }
 
-    io.to(data.roomId).emit('recieved-text-message', fullMsg)
+    io.to(data.roomId).emit('message', fullMsg)
+  })
+
+  socket.on('image-message', async (data: CreateImageMessageData) => {
+    const createImageMessageService = new CreateImageMessageService()
+    const findChatRoomByIdService = new FindChatRoomByIdService()
+
+    const room = await findChatRoomByIdService.execute(data.roomId)
+    const recipientId = room.members.find(
+      (memberId) => memberId !== data.senderId,
+    )
+
+    const { message } = await createImageMessageService.execute({
+      image: data.image,
+      senderId: data.senderId,
+      recipientId: recipientId as string,
+      roomId: data.roomId,
+    })
+
+    io.to(data.roomId).emit('recieved-message', message)
   })
 })

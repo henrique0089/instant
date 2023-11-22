@@ -34,9 +34,13 @@ export function MessagesScrollArea() {
   }, [])
 
   useEffect(() => {
-    socket.on('recieved-text-message', (message: MessageData) =>
-      addMessage(message),
-    )
+    socket.on('message', (message: MessageData) => {
+      addMessage(message)
+    })
+
+    return () => {
+      socket.off('message')
+    }
   }, [addMessage, socket])
 
   return (
@@ -46,7 +50,7 @@ export function MessagesScrollArea() {
           const dir = message.senderId === user?.id ? 'right' : 'left'
 
           return (
-            <>
+            <div key={message.id}>
               {message.type === 'TEXT' ? (
                 <Message
                   dir={dir}
@@ -73,7 +77,11 @@ export function MessagesScrollArea() {
                   }
                   createdAt={message.createdAt}
                 >
-                  <ImageMessage src="/food.png" alt="food" dir={dir} />
+                  <ImageMessage
+                    src={String(message.url)}
+                    alt="food"
+                    dir={dir}
+                  />
                 </Message>
               ) : (
                 <Message
@@ -88,7 +96,7 @@ export function MessagesScrollArea() {
                   <AudioMessage dir={dir} />
                 </Message>
               )}
-            </>
+            </div>
           )
         })}
       </div>

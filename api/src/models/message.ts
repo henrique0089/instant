@@ -4,7 +4,7 @@ import { Replace } from '../replace'
 export type MessageType = 'TEXT' | 'IMAGE' | 'AUDIO'
 
 type Props = {
-  content: string
+  content: string | null
   url: string | null
   type: MessageType
   senderId: string
@@ -29,11 +29,11 @@ export class Message {
     return this._id
   }
 
-  public get content(): string {
+  public get content(): string | null {
     return this.props.content
   }
 
-  public set content(content: string) {
+  public set content(content: string | null) {
     this.props.content = content
   }
 
