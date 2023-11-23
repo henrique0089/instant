@@ -28,6 +28,24 @@ export class PrismaMessagesRepository implements MessagesRepository {
     return messages
   }
 
+  async findImagesByRoomId(roomId: string): Promise<string[]> {
+    const messages = await prisma.message.findMany({
+      where: {
+        roomId,
+      },
+      take: 9,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    const images = messages
+      .map((m) => m.url as string)
+      .filter((image) => image !== null)
+
+    return images
+  }
+
   async create(data: Message): Promise<void> {
     await prisma.message.create({
       data: {

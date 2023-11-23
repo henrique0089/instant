@@ -6,6 +6,7 @@ import { UnpinChatRoomController } from 'src/controllers/chat-room/unpin-chat-ro
 import { CreateChatRoomsController } from '../controllers/chat-room/create-chat-rooms-controller'
 import { DeleteChatRoomController } from '../controllers/chat-room/delete-chat-room-controller'
 import { FindChatRoomsController } from '../controllers/chat-room/find-chat-rooms-controller'
+import { FindRoomImageMessagesController } from '../controllers/messages/find-room-image-messages-controller'
 
 const router = Router()
 
@@ -16,6 +17,7 @@ const pinChatRoomController = new PinChatRoomController()
 const unpinChatRoomController = new UnpinChatRoomController()
 const searchChatRoomByUsernameController =
   new SearchChatRoomByUsernameController()
+const findRoomImageMessagesController = new FindRoomImageMessagesController()
 
 router.get('/chats', ClerkExpressWithAuth(), findChatRoomsController.handle)
 router.post('/chats', ClerkExpressWithAuth(), createChatRoomsController.handle)
@@ -38,6 +40,11 @@ router.delete(
   '/chats/delete/:roomId',
   ClerkExpressWithAuth(),
   deleteChatRoomController.handle,
+)
+router.get(
+  '/chats/images',
+  ClerkExpressWithAuth(),
+  findRoomImageMessagesController.handle,
 )
 
 export { router as routes }

@@ -1,6 +1,6 @@
 import { Content } from './content'
 
-export function ProfileBox() {
+export async function ProfileBox() {
   return (
     <div className="h-screen w-60 bg-zinc-800 border-l border-zinc-700 py-6 flex flex-col justify-between">
       <header className="px-5">
