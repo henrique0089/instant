@@ -46,7 +46,7 @@ export function MessageForm() {
 
       setImage(null)
     }
-  }, [image])
+  }, [image, params.id, socket, user?.id])
 
   return (
     <form onSubmit={handleSubmit}>

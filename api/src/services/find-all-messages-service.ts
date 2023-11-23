@@ -3,7 +3,7 @@ import { PrismaMessagesRepository } from 'src/repositories/prisma-message-reposi
 
 interface Message {
   id: string
-  content: string
+  content: string | null
   type: 'TEXT' | 'IMAGE' | 'AUDIO'
   url: string | null
   roomId: string
@@ -16,10 +16,10 @@ interface Message {
 
 export class FindAllMessagesService {
   async execute(roomId: string): Promise<Message[]> {
-    const textMessagesRepo = new PrismaMessagesRepository()
+    const messagesRepo = new PrismaMessagesRepository()
     const users = await clerkClient.users.getUserList()
 
-    const data = await textMessagesRepo.findAll(roomId)
+    const data = await messagesRepo.findAll(roomId)
 
     const messages: Message[] = data.map((message) => {
       const senderAvatar = users.find((user) => user.id === message.senderId)

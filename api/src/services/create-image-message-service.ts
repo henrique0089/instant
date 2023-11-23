@@ -1,8 +1,10 @@
+import { randomBytes } from 'crypto'
 import fs from 'fs'
+import { resolve } from 'path'
 
 import clerkClient from '@clerk/clerk-sdk-node'
-import { randomBytes } from 'crypto'
-import { resolve } from 'path'
+import sizeOf from 'image-size'
+import { generateImageUrl } from 'src/utils/generate-image-url'
 import { AppError } from '../app-error'
 import { Message } from '../models/message'
 import { PrismaMessagesRepository } from '../repositories/prisma-message-repository'
@@ -37,11 +39,17 @@ export class CreateImageMessageService {
   }: Request): Promise<Response> {
     const messagesRepo = new PrismaMessagesRepository()
 
-    const folder = resolve(__dirname, '..', 'uploads', 'images')
-    const fileName = `${randomBytes(16).toString('hex')}-img.png`
-    const imageUrl = `/${folder}/${fileName}`
+    const dimensions = sizeOf(image)
+    const fileExt =
+      dimensions.type === 'image/jpeg' || dimensions.type === 'image/jpg'
+        ? 'jpg'
+        : 'png'
 
-    fs.writeFile(imageUrl, image, (err) => {
+    const folder = resolve(__dirname, '..', 'uploads', 'images')
+    const fileName = `${randomBytes(16).toString('hex')}-img.${fileExt}`
+    const imageUrl = generateImageUrl(fileName)
+
+    fs.writeFile(`/${folder}/${fileName}`, image, (err) => {
       if (err) {
         throw new AppError(err.message, Number(err.code))
       }

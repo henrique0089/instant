@@ -27,9 +27,9 @@ export function MessagesScrollArea() {
   ])
 
   useEffect(() => {
-    socket.emit('start', { roomId: params.id }, (data: MessagesResponse) =>
-      setMessages(data.messages),
-    )
+    socket.emit('start', { roomId: params.id }, (data: MessagesResponse) => {
+      setMessages(data.messages)
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

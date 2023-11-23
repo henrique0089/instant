@@ -3,7 +3,6 @@ import { Replace } from '../replace'
 
 type Props = {
   members: string[]
-  socketId: string | null
   createdAt: Date
 }
 
@@ -29,14 +28,6 @@ export class ChatRoom {
 
   public set members(members: string[]) {
     this.props.members = members
-  }
-
-  public get socketId(): string | null {
-    return this.props.socketId
-  }
-
-  public set socketId(socketId: string | null) {
-    this.props.socketId = socketId
   }
 
   public get createdAt(): Date {

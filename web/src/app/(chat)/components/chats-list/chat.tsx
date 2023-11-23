@@ -36,7 +36,7 @@ export function Chat({
       removeNotification(chat.id)
     }
 
-    router.push(`/room/${chat.id}`)
+    router.push(`/room/${chat.id}?m=${chat.member.id}`)
   }
 
   return (

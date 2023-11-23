@@ -9,6 +9,7 @@ import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { ZodError } from 'zod'
 
+import { resolve } from 'path'
 import { AppError } from './app-error'
 import { routes } from './routes'
 
@@ -18,6 +19,7 @@ const server = createServer(app)
 app.use(express.json())
 app.use(cors())
 app.use(routes)
+app.use('/images', express.static(resolve(__dirname, 'uploads', 'images')))
 
 const io = new Server(server, { cors: { origin: '*' } })
 

@@ -4,7 +4,6 @@ import { CreateImageMessageService } from 'src/services/create-image-message-ser
 import { CreateMessageService } from 'src/services/create-message-service'
 import { FindAllMessagesService } from 'src/services/find-all-messages-service'
 import { FindChatRoomByIdService } from 'src/services/find-chat-room-by-id-service'
-import { UpdateChatRoomService } from 'src/services/update-chat-room-service'
 import { io } from '../app'
 import { MessageType } from '../models/message'
 
@@ -27,16 +26,11 @@ type CreateImageMessageData = {
 
 io.on('connect', (socket) => {
   socket.on('start', async ({ roomId }: ChatRoomData, cb) => {
-    const updateChatRoomService = new UpdateChatRoomService()
     const findAllMessagesService = new FindAllMessagesService()
 
     socket.join(roomId)
 
-    await updateChatRoomService.execute({ roomId, socketId: socket.id })
-
-    const messages = (await findAllMessagesService.execute(roomId)).filter(
-      (message) => message.content !== null,
-    )
+    const messages = await findAllMessagesService.execute(roomId)
 
     cb({ messages })
   })
@@ -100,6 +94,11 @@ io.on('connect', (socket) => {
       roomId: data.roomId,
     })
 
-    io.to(data.roomId).emit('recieved-message', message)
+    io.to(data.roomId).emit('message', message)
+
+    io.emit('notification', {
+      roomId: data.roomId,
+      senderId: data.senderId,
+    })
   })
 })
