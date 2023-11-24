@@ -145,7 +145,7 @@ export function AddUserDialog({ users }: AddUserDialogProps) {
             </CommandList>
           </Command>
 
-          <DialogFooter className="flex items-center border-t border-zinc-800 p-4 sm:justify-between">
+          <DialogFooter className="flex items-center gap-2 sm:gap-0 border-t border-zinc-800 p-4 sm:justify-between">
             {selectedUsers.length > 0 ? (
               <div className="flex -space-x-2 overflow-hidden">
                 {selectedUsers.map((user) => (

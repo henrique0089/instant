@@ -5,11 +5,11 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <main className="min-h-screen grid grid-cols-2">
-      <div className="bg-zinc-950 flex items-center justify-center">
+    <main className="min-h-screen lg:grid lg:grid-cols-2">
+      <div className="hidden lg:flex bg-zinc-950 items-center justify-center">
         <Image src="/logo.svg" alt="" width={138} height={108} />
       </div>
-      <div className="bg-zinc-900 p-4">
+      <div className="bg-zinc-900 min-h-screen p-4">
         <HomeHeader />
 
         <div className="mt-32 max-w-sm w-full mx-auto flex flex-col gap-4 self-center">

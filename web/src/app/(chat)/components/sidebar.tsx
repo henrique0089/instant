@@ -11,7 +11,7 @@ export function Sidebar() {
   const { user } = useUser()
 
   return (
-    <aside className="h-screen w-20 bg-zinc-900 py-9 px-4 flex flex-col justify-between">
+    <aside className="h-screen w-20 bg-zinc-900 py-9 px-4 flex-col justify-between hidden lg:flex">
       <Link href="/dashboard">
         <Image
           src="/logo.svg"

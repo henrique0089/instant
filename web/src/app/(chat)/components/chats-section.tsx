@@ -36,7 +36,7 @@ export function ChatsSection() {
   }, [getToken, initChatRooms])
 
   return (
-    <div className="mt-4">
+    <div className="mt-6 lg:mt-4">
       {pinnedChatRooms?.length > 0 && (
         <div>
           <h3 className="px-4 text-zinc-400 text-sm font-medium flex items-center gap-2">

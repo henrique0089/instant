@@ -43,7 +43,7 @@ export function Chat({
     <div
       data-active={active}
       onClick={handleNavigateToChatRoom}
-      className="h-[52px] relative data-[active=true]:bg-[#313133] data-[active=true]:before:content-[''] data-[active=true]:before:absolute data-[active=true]:before:bg-purple-700 data-[active=true]:before:w-[3px] data-[active=true]:before:left-0 data-[active=true]:before:top-0 data-[active=true]:before:bottom-0 hover:cursor-pointer flex items-center justify-between px-4"
+      className="h-[52px] relative data-[active=true]:bg-[#313133] data-[active=true]:before:content-[''] data-[active=true]:before:absolute data-[active=true]:before:bg-purple-700 data-[active=true]:before:w-[3px] data-[active=true]:before:left-0 data-[active=true]:before:top-0 data-[active=true]:before:bottom-0 hover:cursor-pointer hover:bg-[#313133] flex items-center justify-between px-4"
     >
       <div className="flex items-start gap-3">
         <div className="relative">

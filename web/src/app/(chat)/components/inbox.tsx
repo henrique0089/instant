@@ -28,7 +28,7 @@ export async function Inbox() {
     })
 
   return (
-    <div className="h-screen w-60 bg-zinc-800 py-6 border-r border-zinc-700">
+    <div className="hidden lg:block h-screen w-60 bg-zinc-800 py-6 border-r border-zinc-700">
       <div className="px-4 flex items-center justify-between">
         <h2 className="text-2xl text-zinc-200 font-semibold">Inbox</h2>
 
