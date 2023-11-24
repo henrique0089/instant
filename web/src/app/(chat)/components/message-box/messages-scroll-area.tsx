@@ -44,7 +44,7 @@ export function MessagesScrollArea() {
   }, [addMessage, socket])
 
   return (
-    <ScrollArea className="message-box-h bg-zinc-900 pt-5 px-4 pb-24">
+    <ScrollArea className="message-box-h bg-zinc-900 pt-5 px-4 pb-44 lg:pb-24">
       <div className="space-y-6 px-2">
         {messages.map((message) => {
           const dir = message.senderId === user?.id ? 'right' : 'left'

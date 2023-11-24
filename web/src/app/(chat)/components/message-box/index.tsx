@@ -20,7 +20,7 @@ export async function MessageBox({ memberId }: MessageBoxProps) {
 
       <MessagesScrollArea />
 
-      <div className="absolute bottom-3 px-9 w-full">
+      <div className="absolute bottom-24 lg:bottom-3 px-4 w-full">
         <MessageForm />
       </div>
     </div>
