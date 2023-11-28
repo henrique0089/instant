@@ -56,11 +56,13 @@ export function Content() {
         <span className="text-zinc-400 text-sm">{member?.email}</span>
       </div>
 
-      <div className="mt-6">
-        <h3 className="text-zinc-500 text-sm">Media ({images.length})</h3>
+      {roomId && (
+        <div className="mt-6">
+          <h3 className="text-zinc-500 text-sm">Media ({images.length})</h3>
 
-        {roomId && <Gallery images={images} />}
-      </div>
+          <Gallery images={images} />
+        </div>
+      )}
     </div>
   )
 }

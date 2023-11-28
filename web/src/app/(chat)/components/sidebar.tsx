@@ -27,7 +27,7 @@ export function Sidebar() {
 
         <Separator className="bg-zinc-800" />
 
-        <Avatar src={user?.imageUrl} alt="Your profile image" />
+        <Avatar alt="Your profile image" />
       </div>
     </aside>
   )
