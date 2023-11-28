@@ -41,8 +41,6 @@ Certifique-se de ter o Docker e o Node.js instalados na sua máquina. Para insta
 
 ## Como executar o projeto na sua máquina
 
-<br />
-
 Para executar o projeto você terá de seguir os passos listados abaixo. 
 
 ## Aviso
@@ -87,8 +85,6 @@ npm run dev
 yarn dev
 ```
 
-<br />
-
 ### Frontend
 
 Navegue até o diretório "web" e execute:
@@ -97,8 +93,6 @@ Navegue até o diretório "web" e execute:
 yarn install
 yarn dev
 ```
-
-<br />
 
 ## Contato
 
