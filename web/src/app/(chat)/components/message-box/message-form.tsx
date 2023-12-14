@@ -3,7 +3,7 @@
 import { Separator } from '@/components/ui/separator'
 import { socketInstance } from '@/lib/socket.io-client'
 import { useUser } from '@clerk/nextjs'
-import { ImageIcon, Mic, Send } from 'lucide-react'
+import { ImageIcon, Send } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { FormEvent, useEffect, useState } from 'react'
 
@@ -54,10 +54,6 @@ export function MessageForm() {
       className="h-16 w-full bg-zinc-800 py-[10px] rounded-md px-4 border border-zinc-700 flex items-center justify-between gap-4"
     >
       <div className="flex-1 flex items-center gap-2">
-        <button type="button" className="group">
-          <Mic className="h-6 w-6 stroke-zinc-400 group-hover:stroke-zinc-300" />
-        </button>
-
         <input
           placeholder="Type a message"
           value={content}
