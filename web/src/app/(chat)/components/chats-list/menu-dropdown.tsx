@@ -12,6 +12,7 @@ import { api } from '@/lib/axios'
 import { ChatRoom, useChatRoomsStore } from '@/store/chat-rooms-store'
 import { useAuth } from '@clerk/nextjs'
 import { MoreVertical, Pin, PinOff, Trash } from 'lucide-react'
+import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Avatar } from '../avatar'
 
@@ -38,6 +39,8 @@ export function MenuDropdown({
 }: MenuDropdownProps) {
   const [open, setOpen] = useState(false)
   const { getToken } = useAuth()
+  const params = useParams()
+  const { push } = useRouter()
   const [pinnedChatRooms, pin, unpin, remove] = useChatRoomsStore((state) => [
     state.pinnedChatRooms,
     state.pin,
@@ -58,7 +61,10 @@ export function MenuDropdown({
       const isPinned = pinnedChatRooms.some((r) => r.id === roomId)
 
       remove(roomId, isPinned)
-      // add tooltip
+
+      if (params.id) {
+        push('/dashboard')
+      }
     } catch (error) {
       console.log(error)
     }
